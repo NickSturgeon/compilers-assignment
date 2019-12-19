@@ -6,20 +6,20 @@ Course: CST 8152 – Compilers, Lab Section: 013 Assignment: 3
 Date: 2019/12/05
 Professor: Sv. Ranev
 Purpose: SCANNER.C: Functions implementing a Lexical Analyzer (Scanner)
-		 as required for CST8152, Assignment #2
-		 scanner_init() must be called before using the scanner.
+         as required for CST8152, Assignment #2
+         scanner_init() must be called before using the scanner.
 Function list:
-	scanner_init();
-	malar_next_token();
-	get_next_state();
-	char_class();
-	aa_func02();
-	aa_func03();
-	aa_func08();
-	aa_func05();
-	aa_func10();
-	aa_func12();
-	strcpy_overflow();
+    scanner_init();
+    malar_next_token();
+    get_next_state();
+    char_class();
+    aa_func02();
+    aa_func03();
+    aa_func08();
+    aa_func05();
+    aa_func10();
+    aa_func12();
+    strcpy_overflow();
 */
 
 /* The #define _CRT_SECURE_NO_WARNINGS should be used in MS Visual Studio projects
@@ -79,28 +79,28 @@ int scanner_init(pBuffer psc_buf) {
 /*
 Purpose: Gets the next Token from the scanner buffer
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/11/12
+History/Versions: 1.0    2019/11/12
 Called functions: b_getc()
-				  b_retract()
-				  strcpy()
-				  strcat()
-			  	  b_mark()
-				  b_getcoffset()
-				  get_next_state()
-				  b_allocate()
-				  b_reset()
-				  b_addc()
-				  b_compact()
-				  b_location()
-				  b_free()
-				  
+                  b_retract()
+                  strcpy()
+                  strcat()
+                    b_mark()
+                  b_getcoffset()
+                  get_next_state()
+                  b_allocate()
+                  b_reset()
+                  b_addc()
+                  b_compact()
+                  b_location()
+                  b_free()
+                  
 Parameters: None
 Return value: Token
 Algorithm: - Checks for any special case tokens
-		   - Return if found, otherwise
-		   - Run the transition table to get an accepting state
-		   - Run the appropriate accepting function
-		   - Return the token
+           - Return if found, otherwise
+           - Run the transition table to get an accepting state
+           - Run the appropriate accepting function
+           - Return the token
 */
 Token malar_next_token(void) {
     Token t = { 0 }; /* token to return after pattern recognition. Set all structure members to 0 */
@@ -138,9 +138,9 @@ Token malar_next_token(void) {
                 line++; /* new line */
                 continue;
             case ' ':
-			case '\v':
+            case '\v':
             case '\t':
-			case '\f':
+            case '\f':
             case '\r': /* for DOS line endings */
                 continue;
             case '{':
@@ -179,7 +179,7 @@ Token malar_next_token(void) {
                 return t;
             case '.':
                 c = b_getc(sc_buf);
-				/* check for .AND. or .OR., retract if not found */
+                /* check for .AND. or .OR., retract if not found */
                 if (c == 'A') {
                     if (b_getc(sc_buf) == 'N') {
                         if (b_getc(sc_buf) == 'D') {
@@ -210,7 +210,7 @@ Token malar_next_token(void) {
                 return t;
             case '!':
                 c = b_getc(sc_buf);
-				/* check for second ! */
+                /* check for second ! */
                 if (c == '!') {
                     c = b_getc(sc_buf);
                     while (c != '\n' && c != '\0')
@@ -218,10 +218,10 @@ Token malar_next_token(void) {
                     b_retract(sc_buf);
                     continue;
                 } else {
-					/* not a valid comment */
-					t.attribute.err_lex[0] = '!';
+                    /* not a valid comment */
+                    t.attribute.err_lex[0] = '!';
                     t.attribute.err_lex[1] = c;
-					t.attribute.err_lex[2] = '\0';
+                    t.attribute.err_lex[2] = '\0';
                     while (c != '\n' && c != '\0')
                         c = b_getc(sc_buf); /* get to the end of the line or file */
                     t.code = ERR_T;
@@ -231,11 +231,11 @@ Token malar_next_token(void) {
             case '=':
                 c = b_getc(sc_buf);
                 if (c == '=') {
-					/* == compare */
+                    /* == compare */
                     t.code = REL_OP_T;
                     t.attribute.rel_op = EQ;
                 } else {
-					/* = assignment */
+                    /* = assignment */
                     b_retract(sc_buf);
                     t.code = ASS_OP_T;
                 }
@@ -247,14 +247,14 @@ Token malar_next_token(void) {
             case '<':
                 c = b_getc(sc_buf);
                 if (c == '>') {
-					/* <> not equal */
+                    /* <> not equal */
                     t.code = REL_OP_T;
                     t.attribute.rel_op = NE;
                 } else if (c == '<') {
-					/* << string concatenation */
+                    /* << string concatenation */
                     t.code = SCC_OP_T;
                 } else {
-					/* < less than */
+                    /* < less than */
                     b_retract(sc_buf);
                     t.code = REL_OP_T;
                     t.attribute.rel_op = LT;
@@ -262,26 +262,26 @@ Token malar_next_token(void) {
                 return t;
         }
 
-		/* Part 2: Implementation of transition table */
+        /* Part 2: Implementation of transition table */
 
-		/* we already have the char so we must mark the previous position */
+        /* we already have the char so we must mark the previous position */
         lexstart = b_mark(sc_buf, (short)(b_getcoffset(sc_buf) - 1));
 
-		/* run through the transition table until we get an error or accepting state */
+        /* run through the transition table until we get an error or accepting state */
         while (1) {
             state = get_next_state(state, (char)c);
-			/* validate valid state */
-			if (state < 0 || state > (TABLE_ROWS - 1)) {
-				return runtime_error(SOR);
-			}
+            /* validate valid state */
+            if (state < 0 || state > (TABLE_ROWS - 1)) {
+                return runtime_error(SOR);
+            }
 
             state_type = as_table[state];
-			/* validate valid state type */
-			if (state_type < NOAS || state_type > ASWR) {
-				return runtime_error(WST);
-			}
+            /* validate valid state type */
+            if (state_type < NOAS || state_type > ASWR) {
+                return runtime_error(WST);
+            }
 
-			/* stop checking if error or accepting state */
+            /* stop checking if error or accepting state */
             if (state_type == NOAS) {
                 c = b_getc(sc_buf);
             } else {
@@ -290,27 +290,27 @@ Token malar_next_token(void) {
         }
 
         if (state_type == ASWR) {
-			/* return the last char to the buffer */
+            /* return the last char to the buffer */
             b_retract(sc_buf);
         }
 
         lexend = b_getcoffset(sc_buf);
         lex_length = (lexend - lexstart);
 
-		/* fixed buffer since we know the size of the lexeme */
+        /* fixed buffer since we know the size of the lexeme */
         lex_buf = b_allocate(lex_length, 0, 'f');
         b_reset(sc_buf); /* return to the start of the lexeme */
 
-		/* add the lexeme to the buffer */
+        /* add the lexeme to the buffer */
         for (; lex_length > 0; lex_length--) {
             char tmp = b_getc(sc_buf);
             if (tmp == '\n') line++;
             b_addc(lex_buf, tmp);
         }
-		b_compact(lex_buf, '\0');
+        b_compact(lex_buf, '\0');
 
-		/* get the appropriate state function */
-		b_mark(lex_buf, 0);
+        /* get the appropriate state function */
+        b_mark(lex_buf, 0);
         t = aa_table[state](b_location(lex_buf));
 
         b_free(lex_buf);
@@ -321,10 +321,10 @@ Token malar_next_token(void) {
 /*
 Purpose: Gets the next transition table state
 Author: Svillen Ranev
-History/Versions: 1.19.2	2019/10/02
+History/Versions: 1.19.2    2019/10/02
 Called functions: char_class()
 Parameters: state (int) - the current state
-			c (char) - the char to use to get the next state
+            c (char) - the char to use to get the next state
 Return value: int - the next state value
 */
 int get_next_state(int state, char c) {
@@ -353,8 +353,8 @@ int get_next_state(int state, char c) {
 /*
 Purpose: Gets the next transition table column for the char
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/11/12
-Called functions: None		  
+History/Versions: 1.0    2019/11/12
+Called functions: None          
 Parameters: c (char) - the char to use to get the next column
 Return value: int - the next column index
 */
@@ -382,21 +382,21 @@ int char_class(char c) {
 
 /*
 Purpose: Accepting function for keywords (KW) and arithmetic variable
-		 identifiers (VID - AVID)
+         identifiers (VID - AVID)
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/11/12
+History/Versions: 1.0    2019/11/12
 Called functions: strcpy()
-			  	  strncpy()
-				  strcmp()
-				  strlen()
+                    strncpy()
+                  strcmp()
+                  strlen()
 Parameters: lexeme[] (char) - string containing the lexeme to identify
 Return value: Token - token value containing lexeme information 
 */
 Token aa_func02(char lexeme[]) {
-	Token t = { 0 }; /* token to return */
+    Token t = { 0 }; /* token to return */
     int i; /* index of keyword array */
 
-	/* check for keyword first */
+    /* check for keyword first */
     for (i = 0; i < KWT_SIZE; i++) {
         if (strcmp(kw_table[i], lexeme) == 0) {
             t.code = KW_T;
@@ -406,7 +406,7 @@ Token aa_func02(char lexeme[]) {
     }
 
     t.code = AVID_T;
-	/* check if lexeme is too big for the VID */
+    /* check if lexeme is too big for the VID */
     if (strlen(lexeme) > VID_LEN) {
         strncpy(t.attribute.vid_lex, lexeme, VID_LEN);
         t.attribute.vid_lex[VID_LEN] = '\0';
@@ -420,18 +420,18 @@ Token aa_func02(char lexeme[]) {
 /*
 Purpose: Accepting function for string variable identifier (VID - SVID)
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/11/12
+History/Versions: 1.0    2019/11/12
 Called functions: strcpy()
-			  	  strncpy()
-				  strlen()
+                    strncpy()
+                  strlen()
 Parameters: lexeme[] (char) - string containing the lexeme to identify
 Return value: Token - token value containing lexeme information 
 */
 Token aa_func03(char lexeme[]) {
-	Token t = { 0 }; /* token to return */
+    Token t = { 0 }; /* token to return */
 
     t.code = SVID_T;
-	/* check if lexeme is too big for the VID */
+    /* check if lexeme is too big for the VID */
     if (strlen(lexeme) > (VID_LEN - 1)) {
         strncpy(t.attribute.vid_lex, lexeme, (VID_LEN - 1));
         t.attribute.vid_lex[VID_LEN - 1] = '@';
@@ -446,9 +446,9 @@ Token aa_func03(char lexeme[]) {
 /*
 Purpose: Accepting function for floating-point literal (FPL)
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/11/12
+History/Versions: 1.0    2019/11/12
 Called functions: atof()
-			  	  strcpy_overflow()
+                    strcpy_overflow()
 Parameters: lexeme[] (char) - string containing the lexeme to identify
 Return value: Token - token value containing lexeme information 
 */
@@ -456,19 +456,19 @@ Token aa_func08(char lexeme[]) {
     Token t = { 0 }; /* token to return */
     double d; /* conversion of lexeme */
 
-	/* transistion table ensures this will work */
+    /* transistion table ensures this will work */
     d = atof(lexeme);
 
-	/* check if value is valid */
-	if ((d > FLT_MAX || d < FLT_MIN) && d != 0) {
-		/* doesn't fit in 4-byte float */
+    /* check if value is valid */
+    if ((d > FLT_MAX || d < FLT_MIN) && d != 0) {
+        /* doesn't fit in 4-byte float */
         t.code = ERR_T;
         strcpy_overflow(t.attribute.err_lex, lexeme, ERR_LEN);
-	}
-	else {
+    }
+    else {
         t.code = FPL_T;
-		t.attribute.flt_value = (float)d;
-	}
+        t.attribute.flt_value = (float)d;
+    }
 
     return t;
 }
@@ -476,9 +476,9 @@ Token aa_func08(char lexeme[]) {
 /*
 Purpose: Accepting function for integer literal(IL) - decimal constant (DIL)
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/11/12
+History/Versions: 1.0    2019/11/12
 Called functions: atol()
-			  	  strcpy_overflow()
+                    strcpy_overflow()
 Parameters: lexeme[] (char) - string containing the lexeme to identify
 Return value: Token - token value containing lexeme information 
 */
@@ -486,12 +486,12 @@ Token aa_func05(char lexeme[]) {
     Token t = { 0 }; /* token to return */
     long l; /* conversion of lexeme */
 
-	/* transistion table ensures this will work */
+    /* transistion table ensures this will work */
     l = atol(lexeme);
 
-	/* check if value is valid, must be positive */
+    /* check if value is valid, must be positive */
     if (l > SHRT_MAX) {
-		/* doesn't fit in 2-byte int */
+        /* doesn't fit in 2-byte int */
         t.code = ERR_T;
         strcpy_overflow(t.attribute.err_lex, lexeme, ERR_LEN);
     } else {
@@ -505,10 +505,10 @@ Token aa_func05(char lexeme[]) {
 /*
 Purpose: Accepting function for string literal (SL)
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/11/12
+History/Versions: 1.0    2019/11/12
 Called functions: b_limit()
-				  strlen()
-			  	  b_addc()
+                  strlen()
+                    b_addc()
 Parameters: lexeme[] (char) - string containing the lexeme to identify
 Return value: Token - token value containing lexeme information 
 */
@@ -517,7 +517,7 @@ Token aa_func10(char lexeme[]) {
     size_t i; /* index of lexeme */
 
     t.code = STR_T;
-	/* store the current buffer position so that we can retrieve it later */
+    /* store the current buffer position so that we can retrieve it later */
     t.attribute.get_int = b_limit(str_LTBL);
 
     for (i = 1; i < (strlen(lexeme) - 1); i++) {
@@ -531,7 +531,7 @@ Token aa_func10(char lexeme[]) {
 /*
 Purpose: Accepting function for error token (ES & ER)
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/11/12
+History/Versions: 1.0    2019/11/12
 Called functions: strcpy_overflow()
 Parameters: lexeme[] (char) - string containing the lexeme to identify
 Return value: Token - token value containing lexeme information 
@@ -549,15 +549,15 @@ Token aa_func12(char lexeme[]) {
 
 /*
 Purpose: Copies string and inserts "..." to the end if it is 
-		 too long to fit in the dest
+         too long to fit in the dest
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/11/12
+History/Versions: 1.0    2019/11/12
 Called functions: strlen()
-				  strncpy()
-				  strcpy()
+                  strncpy()
+                  strcpy()
 Parameters: dest[] (char) - destination to copy the string to
-			src[] (char) - source to copy the string from
-			limit (int) - length limit of dest
+            src[] (char) - source to copy the string from
+            limit (int) - length limit of dest
 Return value: None
 */
 void strcpy_overflow(char dest[], char src[], size_t limit) {
@@ -575,15 +575,15 @@ void strcpy_overflow(char dest[], char src[], size_t limit) {
 /*
 Purpose: Return a runtime error token with the specified code
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/11/12
+History/Versions: 1.0    2019/11/12
 Called functions: strcpy()
 Parameters: code (int) - the run time error code
 Return value: Token - token with the run time error info
 */
 Token runtime_error(int code) {
-	Token t = { 0 };
-	t.code = RTE_T;
-	scerrnum = code;
-	strcpy(t.attribute.err_lex, "RUN TIME ERROR: ");
-	return t;
+    Token t = { 0 };
+    t.code = RTE_T;
+    scerrnum = code;
+    strcpy(t.attribute.err_lex, "RUN TIME ERROR: ");
+    return t;
 }

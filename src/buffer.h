@@ -7,28 +7,28 @@ Date: 2019/12/05
 Professor: Sv. Ranev
 Purpose: Header file for the buffer containing constant definitions, struct and function declarations
 Function list:
-	b_allocate();
-	b_addc();
-	b_clear();
-	b_free();
-	b_isfull();
-	b_limit();
-	b_capacity();
-	b_mark();
-	b_mode();
-	b_incfactor();
-	b_load();
-	b_isempty();
-	b_getc();
-	b_eob();
-	b_print();
-	b_compact();
-	b_rflag();
-	b_retract();
-	b_reset();
-	b_getcoffset();
-	b_rewind();
-	b_location();
+    b_allocate();
+    b_addc();
+    b_clear();
+    b_free();
+    b_isfull();
+    b_limit();
+    b_capacity();
+    b_mark();
+    b_mode();
+    b_incfactor();
+    b_load();
+    b_isempty();
+    b_getc();
+    b_eob();
+    b_print();
+    b_compact();
+    b_rflag();
+    b_retract();
+    b_reset();
+    b_getcoffset();
+    b_rewind();
+    b_location();
 */
 
 #ifndef BUFFER_H_

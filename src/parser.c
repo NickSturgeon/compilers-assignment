@@ -6,49 +6,49 @@ Course: CST 8152 – Compilers, Lab Section: 013 Assignment: 3
 Date: 2019/12/05
 Professor: Sv. Ranev
 Purpose: Implementation file for the parser containing function definitions.
-		 Parses a file witten in the PLATYPUS language.
+         Parses a file witten in the PLATYPUS language.
 Function list:
-	parser();
-	program();
-	opt_statements();
-	statements();
-	statements_p();
-	statement();
-	input_statement();
-	output_statement();
-	assignment_statement();
-	assignment_expression();
-	string_expression();
-	string_expression_p();
-	primary_string_expression();
-	arithmetic_expression();
-	arithmetic_expression_unary();
-	arithmetic_expression_primary();
-	arithmetic_expression_additive();
-	arithmetic_expression_additive_p();
-	arithmetic_additive_operator();
-	arithmetic_expression_multiplicative();
-	arithmetic_expression_multiplicative_p();
-	arithmetic_multiplicative_operator();
-	variable_list();
-	variable_list_p();
-	output_list();
-	selection_statement();
-	iteration_statement();
-	pre_condition();
-	conditional_expression();
-	logical_or_expression();
-	logical_or_expression_p();
-	logical_and_expression();
-	logical_and_expression_p();
-	relational_expression();
-	relational_operator();
-	primary_a_relational_expression();
-	primary_s_relational_expression();
-	gen_incode();
-	match();
-	syn_printe();
-	syn_eh();
+    parser();
+    program();
+    opt_statements();
+    statements();
+    statements_p();
+    statement();
+    input_statement();
+    output_statement();
+    assignment_statement();
+    assignment_expression();
+    string_expression();
+    string_expression_p();
+    primary_string_expression();
+    arithmetic_expression();
+    arithmetic_expression_unary();
+    arithmetic_expression_primary();
+    arithmetic_expression_additive();
+    arithmetic_expression_additive_p();
+    arithmetic_additive_operator();
+    arithmetic_expression_multiplicative();
+    arithmetic_expression_multiplicative_p();
+    arithmetic_multiplicative_operator();
+    variable_list();
+    variable_list_p();
+    output_list();
+    selection_statement();
+    iteration_statement();
+    pre_condition();
+    conditional_expression();
+    logical_or_expression();
+    logical_or_expression_p();
+    logical_and_expression();
+    logical_and_expression_p();
+    relational_expression();
+    relational_operator();
+    primary_a_relational_expression();
+    primary_s_relational_expression();
+    gen_incode();
+    match();
+    syn_printe();
+    syn_eh();
 */
 
 #include <stdio.h>
@@ -68,14 +68,14 @@ int synerrno;
 
 /*
 Purpose: Gets the next Token from the scanner buffer and
-		 begins parsing the program
+         begins parsing the program
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/12/05
+History/Versions: 1.0    2019/12/05
 Called functions: malar_next_token()
-				  program()
-				  match()
-				  gen_incode()
-				  
+                  program()
+                  match()
+                  gen_incode()
+                  
 Parameters: None
 Return value: None
 */
@@ -173,7 +173,7 @@ void statement() {
             }
             break;
         default:
-			syn_printe();
+            syn_printe();
     }
 }
 
@@ -224,7 +224,7 @@ void assignment_expression() {
             gen_incode("PLATY: Assignment expression (string) parsed");
             break;
         default:
-			syn_printe();
+            syn_printe();
     }
 }
 
@@ -257,7 +257,7 @@ void primary_string_expression() {
             match(STR_T, NO_ATTR);
             break;
         default:
-			syn_printe();
+            syn_printe();
     }
     gen_incode("PLATY: Primary string expression parsed");
 }
@@ -276,7 +276,7 @@ void arithmetic_expression() {
             arithmetic_expression_additive();
             break;
         default:
-			syn_printe();
+            syn_printe();
     }
     gen_incode("PLATY: Arithmetic expression parsed");
 }
@@ -292,7 +292,7 @@ void arithmetic_expression_unary() {
             match(ART_OP_T, MINUS);
             break;
         default:
-			syn_printe();
+            syn_printe();
     }
     arithmetic_expression_primary();
     gen_incode("PLATY: Unary arithmetic expression parsed");
@@ -317,7 +317,7 @@ void arithmetic_expression_primary() {
             match(RPR_T, NO_ATTR);
             break;
         default:
-			syn_printe();
+            syn_printe();
     }
     gen_incode("PLATY: Primary arithmetic expression parsed");
 }
@@ -356,7 +356,7 @@ void arithmetic_additive_operator() {
             arithmetic_expression_multiplicative();
             break;
         default:
-			syn_printe();
+            syn_printe();
     }
 }
 
@@ -393,7 +393,7 @@ void arithmetic_multiplicative_operator() {
             arithmetic_expression_primary();
             break;
         default:
-			syn_printe();
+            syn_printe();
     }
 }
 
@@ -410,7 +410,7 @@ void variable_list() {
             variable_list_p();
             break;
         default:
-			syn_printe();
+            syn_printe();
     }
     gen_incode("PLATY: Variable list parsed");
 }
@@ -430,7 +430,7 @@ void variable_list_p() {
                 variable_list_p();
                 break;
             default:
-				syn_printe();
+                syn_printe();
         }
     }
 }
@@ -500,10 +500,10 @@ void pre_condition() {
                 match(KW_T, FALSE);
                 break;
             default:
-				syn_printe();
+                syn_printe();
         }
     } else {
-		syn_printe();
+        syn_printe();
     }
 }
 
@@ -553,7 +553,7 @@ void logical_and_expression_p() {
 }
 
 /* <relational expression> -> <primary a_relational expression> <relational operator> <primary a_relational expression> 
-		| <primary s_relational expression> <relational operator> <primary s_relational expression> */
+        | <primary s_relational expression> <relational operator> <primary s_relational expression> */
 /* FIRST(<relational expression>) = { AVID_T, FPL_T, INL_T, SVID_T, STR_T } */
 void relational_expression() {
     switch (lookahead.code) {
@@ -570,7 +570,7 @@ void relational_expression() {
             primary_s_relational_expression();
             break;
         default:
-			syn_printe();
+            syn_printe();
     }
     gen_incode("PLATY: Relational expression parsed");
 }
@@ -593,10 +593,10 @@ void relational_operator() {
                 match(REL_OP_T, LT);
                 break;
             default:
-				syn_printe();
+                syn_printe();
         }
     } else {
-		syn_printe();
+        syn_printe();
     }
 }
 
@@ -614,7 +614,7 @@ void primary_a_relational_expression() {
             match(INL_T, NO_ATTR);
             break;
         default:
-			syn_printe();
+            syn_printe();
     }
     gen_incode("PLATY: Primary a_relational expression parsed");
 }
@@ -629,9 +629,9 @@ void primary_s_relational_expression() {
 /*
 Purpose: Prints the parsed statement or expression
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/12/05
+History/Versions: 1.0    2019/12/05
 Called functions: printf()
-				  
+                  
 Parameters: out - the parsed statement or expression to display
 Return value: None
 */
@@ -641,16 +641,16 @@ void gen_incode(const char* out) {
 
 /*
 Purpose: Matches the lookahead token to the specified token,
-		 or displays a syntax error if not a match
+         or displays a syntax error if not a match
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/12/05
+History/Versions: 1.0    2019/12/05
 Called functions: malar_next_token()
-				  syn_printe()
-				  syn_eh()
-				  
+                  syn_printe()
+                  syn_eh()
+                  
 Parameters: pr_token_code - the token code to match with
-			pr_token_attribute - the token attribute
-				value to match with, if applicable
+            pr_token_attribute - the token attribute
+                value to match with, if applicable
 Return value: None
 */
 void match(int pr_token_code, int pr_token_attribute) {
@@ -679,9 +679,9 @@ void match(int pr_token_code, int pr_token_attribute) {
 /*
 Purpose: Prints the syntax error of the lookahead token
 Author: Svillen Ranev
-History/Versions: 1.0	2019/12/05
+History/Versions: 1.0    2019/12/05
 Called functions: printf()
-				  
+                  
 Parameters: None
 Return value: None
 */
@@ -754,19 +754,19 @@ void syn_printe() {
 
 /*
 Purpose: Prints the syntax error and tries to find the next
-		 occurence of the specified token
+         occurence of the specified token
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/12/05
+History/Versions: 1.0    2019/12/05
 Called functions: syn_printe()
-				  malar_next_token()
-				  exit()
-				  
+                  malar_next_token()
+                  exit()
+                  
 Parameters: sync_token_code - the token to skip ahead to
 Return value: None
 */
 void syn_eh(int sync_token_code) {
-	synerrno++;
-	syn_printe();
+    synerrno++;
+    syn_printe();
 
     while (lookahead.code != SEOF_T
         && lookahead.code != sync_token_code) {

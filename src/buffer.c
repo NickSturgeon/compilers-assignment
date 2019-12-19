@@ -7,49 +7,49 @@ Date: 2019/12/05
 Professor: Sv. Ranev
 Purpose: Implementation file for the buffer containing function definitions
 Function list:
-	b_allocate();
-	b_addc();
-	b_clear();
-	b_free();
-	b_isfull();
-	b_limit();
-	b_capacity();
-	b_mark();
-	b_mode();
-	b_incfactor();
-	b_load();
-	b_isempty();
-	b_getc();
-	b_eob();
-	b_print();
-	b_compact();
-	b_rflag();
-	b_retract();
-	b_reset();
-	b_getcoffset();
-	b_rewind();
-	b_location();
+    b_allocate();
+    b_addc();
+    b_clear();
+    b_free();
+    b_isfull();
+    b_limit();
+    b_capacity();
+    b_mark();
+    b_mode();
+    b_incfactor();
+    b_load();
+    b_isempty();
+    b_getc();
+    b_eob();
+    b_print();
+    b_compact();
+    b_rflag();
+    b_retract();
+    b_reset();
+    b_getcoffset();
+    b_rewind();
+    b_location();
 */
 
 #include "buffer.h"
 
 /*
 Purpose: Allocates space in memory for a Buffer and its character
-		 array based on provided parameters.
-		 Returns a pointer to the Buffer on success, or NULL on error.
+         array based on provided parameters.
+         Returns a pointer to the Buffer on success, or NULL on error.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: calloc()
-				  malloc()
-				  free()
+                  malloc()
+                  free()
 Parameters: init_capacity: short (0 to SHRT_MAX - 1)
-			inc_factor: char (0 to UCHAR_MAX)
-			o_mode: char ('a', 'f', or 'm')
+            inc_factor: char (0 to UCHAR_MAX)
+            o_mode: char ('a', 'f', or 'm')
 Return value: Buffer*
 Algorithm: - Checks for invalid values
-		   - Initializes memory for the buffer
-		   - Sets initial values
-		   - Returns a pointer to the buffer
+           - Initializes memory for the buffer
+           - Sets initial values
+           - Returns a pointer to the buffer
 */
 Buffer* b_allocate(short init_capacity, char inc_factor, char o_mode) {
     Buffer* buffer; /* pointer to the buffer object to return */
@@ -113,27 +113,27 @@ Buffer* b_allocate(short init_capacity, char inc_factor, char o_mode) {
 
 /*
 Purpose: Adds a character to the Buffer's character array if there is space.
-		 If not, it attempts to increase the capacity based on the Buffer's
-		 properties or, if there is no remaining space, returns NULL;
-		 Sets the R flag if the memory location of the character array changed
-		 on reallocation.
-		 Increments the addc offset.
-		 Returns a pointer to the Buffer on success.
+         If not, it attempts to increase the capacity based on the Buffer's
+         properties or, if there is no remaining space, returns NULL;
+         Sets the R flag if the memory location of the character array changed
+         on reallocation.
+         Increments the addc offset.
+         Returns a pointer to the Buffer on success.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: b_incfactor()
-				  printf()
-				  realloc()
+                  printf()
+                  realloc()
 Parameters: pBD: pBuffer const
-			symbol: char
+            symbol: char
 Return value: pBuffer
 Algorithm: - Resets R flag
-		   - Checks if the character array is full
-		   - Adds the character and returns if there is room, otherwise:
-		   - Determines new capacity
-		   - Reallocates with new capacity
-		   - Changes the memory location and sets the R flag if applicable
-		   - Adds the character to the character array
+           - Checks if the character array is full
+           - Adds the character and returns if there is room, otherwise:
+           - Determines new capacity
+           - Reallocates with new capacity
+           - Changes the memory location and sets the R flag if applicable
+           - Adds the character to the character array
 */
 pBuffer b_addc(pBuffer const pBD, char symbol) {
     long new_capacity; /* new capacity after increase */
@@ -211,9 +211,9 @@ pBuffer b_addc(pBuffer const pBD, char symbol) {
 
 /*
 Purpose: Resets the properties of the Buffer relating to reading and writing to
-		 the character array, in order to allow re-writing to the Buffer.
+         the character array, in order to allow re-writing to the Buffer.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: None
 Parameters: pBD: Buffer* const
 Return value: int (0 = Success, -1 = Error)
@@ -233,7 +233,7 @@ int b_clear(Buffer* const pBD) {
 /*
 Purpose: Free all allocated memory for the Buffer and its character array.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: free()
 Parameters: pBD: Buffer* const
 Return value: None
@@ -248,7 +248,7 @@ void b_free(Buffer* const pBD) {
 /*
 Purpose: Checks if the Buffer is full and can no longer be written to.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: None
 Parameters: pBD: Buffer* const
 Return value: int (0 = Available, 1 = Full, -1 = Error)
@@ -266,7 +266,7 @@ int b_isfull(Buffer* const pBD) {
 /*
 Purpose: Returns the amount of chars currently in the Buffer's character array.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: None
 Parameters: pBD: Buffer* const
 Return value: short
@@ -281,7 +281,7 @@ short b_limit(Buffer* const pBD) {
 /*
 Purpose: Returns the amount of chars currently in the Buffer's character array.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: None
 Parameters: pBD: Buffer* const
 Return value: short
@@ -296,13 +296,13 @@ short b_capacity(Buffer* const pBD) {
 
 /*
 Purpose: Sets the Buffer's markc_offset using the value of mark.
-		 If mark is not within the Buffer's addc_offset value, it
-		 returns an error.
+         If mark is not within the Buffer's addc_offset value, it
+         returns an error.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: None
 Parameters: pBD: pBuffer const
-			mark: short (0 to current addc_offset)
+            mark: short (0 to current addc_offset)
 Return value: short
 */
 short b_mark(pBuffer const pBD, short mark) {
@@ -321,7 +321,7 @@ short b_mark(pBuffer const pBD, short mark) {
 /*
 Purpose: Returns the Buffer's mode value.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: None
 Parameters: pBD: Buffer* const
 Return value: int (-1, 0, or 1 = mode, -2 = Error)
@@ -336,7 +336,7 @@ int b_mode(Buffer* const pBD) {
 /*
 Purpose: Returns the Buffer's inc_factor value.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: None
 Parameters: pBD: Buffer* const
 Return value: size_t (0 - 255)
@@ -354,20 +354,20 @@ size_t b_incfactor(Buffer* const pBD) {
 
 /*
 Purpose: Loads a FILE's contents into the Buffer's character array.
-		 If the file is larger than the Buffer's max capacity, it returns
-		 the last character read to the FILE buffer and returns an error.
+         If the file is larger than the Buffer's max capacity, it returns
+         the last character read to the FILE buffer and returns an error.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: feof()
-				  getc()
-				  b_addc()
-				  ungetc()
+                  getc()
+                  b_addc()
+                  ungetc()
 Parameters: fi: FILE* const
-			pBD: Buffer* const
+            pBD: Buffer* const
 Return value: int (0 = Success, -1 = Error)
 Algorithm: - Checks for invalid values
-		   - Loops though file buffer
-		   - Adds character to buffer while valid
+           - Loops though file buffer
+           - Adds character to buffer while valid
 */
 int b_load(FILE* const fi, Buffer* const pBD) {
     char c; /* holds the next character from the file buffer */
@@ -392,7 +392,7 @@ int b_load(FILE* const fi, Buffer* const pBD) {
 /*
 Purpose: Checks if the Buffer's character array is empty.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: None
 Parameters: pBD: Buffer* const
 Return value: int (1 = Empty, 0 = Not Empty, -1 = Error)
@@ -406,9 +406,9 @@ int b_isempty(Buffer* const pBD) {
 
 /*
 Purpose: Returns the next character from the Buffer's character array.
-		 Sets EOB flag if there are no more characters to read.
+         Sets EOB flag if there are no more characters to read.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: None
 Parameters: pBD: Buffer* const
 Return value: char
@@ -432,7 +432,7 @@ char b_getc(Buffer* const pBD) {
 /*
 Purpose: Returns the current value of the Buffer's EOB flag.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: None
 Parameters: pBD: Buffer* const
 Return value: int (0 or 1)
@@ -446,22 +446,22 @@ int b_eob(Buffer* const pBD) {
 
 /*
 Purpose: Prints the contents of the Buffer's character array using printf().
-		 If 'nl' is non-zero, prints a new line at the end.
-		 Return the number of characters printed.
+         If 'nl' is non-zero, prints a new line at the end.
+         Return the number of characters printed.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: b_getc()
-			 	  b_eob()
-				  printf()
+                   b_eob()
+                  printf()
 Parameters: pBD: Buffer* const
-			nl: char
+            nl: char
 Return value: int
 Algorithm: - Checks for invalid values
-		   - Stores the current offset
-		   - Prints each character until b_eob() returns true
-		   - Restores the original offset to the buffer
-		   - Prints a newline if applicable
-		   - Returns a count of the characters printed
+           - Stores the current offset
+           - Prints each character until b_eob() returns true
+           - Restores the original offset to the buffer
+           - Prints a newline if applicable
+           - Returns a count of the characters printed
 */
 int b_print(Buffer* const pBD, char nl) {
     int count = 0; /* number of characters read */
@@ -494,21 +494,21 @@ int b_print(Buffer* const pBD, char nl) {
 
 /*
 Purpose: Shrinks the Buffer's character array's capacity to fit the current
-		 number of characters plus space for one more character.
-		 Sets the R flag if the memory location of the character array changed
-		 on reallocation.
-		 Adds 'symbol' to the end of the character array and increments addc_offset.
-		 Returns a pointer to the Buffer.
+         number of characters plus space for one more character.
+         Sets the R flag if the memory location of the character array changed
+         on reallocation.
+         Adds 'symbol' to the end of the character array and increments addc_offset.
+         Returns a pointer to the Buffer.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: realloc()
 Parameters: pBD: Buffer* const
-			symbol: char
+            symbol: char
 Return value: Buffer*
 Algorithm: - Checks for invalid values
-		   - Reallocates memory to fit the current buffer
-		   - Handle memory location change if applicable
-		   - Adds the specified character to the end of the buffer
+           - Reallocates memory to fit the current buffer
+           - Handle memory location change if applicable
+           - Adds the specified character to the end of the buffer
 */
 Buffer* b_compact(Buffer* const pBD, char symbol) {
     char* new_mem_loc; /* holds the new memory location after reallocation */
@@ -541,7 +541,7 @@ Buffer* b_compact(Buffer* const pBD, char symbol) {
 /*
 Purpose: Returns the current value of the Buffer's R flag.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: None
 Parameters: pBD: Buffer* const
 Return value: char (0 or 1)
@@ -556,7 +556,7 @@ char b_rflag(Buffer* const pBD) {
 /*
 Purpose: Decrements the Buffer's getc_offset by one.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: None
 Parameters: pBD: Buffer* const
 Return value: short
@@ -575,7 +575,7 @@ short b_retract(Buffer* const pBD) {
 /*
 Purpose: Sets the Buffer's getc_offset to markc_offset.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: None
 Parameters: pBD: Buffer* const
 Return value: short
@@ -592,7 +592,7 @@ short b_reset(Buffer* const pBD) {
 /*
 Purpose: Gets the current value of the Buffer's getc_offset.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: None
 Parameters: pBD: Buffer* const
 Return value: short
@@ -606,9 +606,9 @@ short b_getcoffset(Buffer* const pBD) {
 
 /*
 Purpose: Resets the Buffer's getc_offset and markc_offset
-		 so that the Buffer may be rewritten to.
+         so that the Buffer may be rewritten to.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: None
 Parameters: pBD: Buffer* const
 Return value: int (0 = Success, -1 = Error)
@@ -626,9 +626,9 @@ int b_rewind(Buffer* const pBD) {
 
 /*
 Purpose: Gets the memory address of the current mark
-		 in the Buffer.
+         in the Buffer.
 Author: Nicholas Sturgeon
-History/Versions: 1.0	2019/10/02
+History/Versions: 1.0    2019/10/02
 Called functions: None
 Parameters: pBD: Buffer* const
 Return value: char*

@@ -118,16 +118,16 @@ PTR_AAF aa_table[TABLE_ROWS] = {
 #define KWT_SIZE  10
 
 char * kw_table[KWT_SIZE] = {
-	"ELSE",
-	"FALSE",
-	"IF",
-	"PLATYPUS",
-	"READ",
-	"REPEAT",
-	"THEN",
-	"TRUE",
-	"WHILE",
-	"WRITE"   
+    "ELSE",
+    "FALSE",
+    "IF",
+    "PLATYPUS",
+    "READ",
+    "REPEAT",
+    "THEN",
+    "TRUE",
+    "WHILE",
+    "WRITE"   
 };
 
 #endif

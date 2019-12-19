@@ -62,7 +62,7 @@ static void garbage_collect(void);
  */    
 int main(int argc, char ** argv){
 
-	FILE *fi;       /* input file handle */	
+    FILE *fi;       /* input file handle */    
         int loadsize = 0; /*the size of the file loaded in the buffer */
         int ansi_c = !ANSI_C; /* ANSI C flag */
 /* Check if the compiler option is set to compile ANSI C */
@@ -81,29 +81,29 @@ int main(int argc, char ** argv){
        err_printf("%s%s%s",argv[0],": ","Missing source file name.");
        err_printf("%s%s%s","Usage: ", "parser", "  source_file_name");
         exit(EXIT_FAILURE);
-	}	
+    }    
 
-/* create a source code input buffer - multiplicative mode */	
-	sc_buf = b_allocate(INIT_CAPACITY,INC_FACTOR,'m');
-	if (sc_buf == NULL){
-	  err_printf("%s%s%s",argv[0],": ","Could not create source buffer");
-	  exit(EXIT_FAILURE);
-	}
+/* create a source code input buffer - multiplicative mode */    
+    sc_buf = b_allocate(INIT_CAPACITY,INC_FACTOR,'m');
+    if (sc_buf == NULL){
+      err_printf("%s%s%s",argv[0],": ","Could not create source buffer");
+      exit(EXIT_FAILURE);
+    }
 
 
 /*open source file */
-	if ((fi = fopen(argv[1],"r")) == NULL){
-		err_printf("%s%s%s%s",argv[0],": ", "Cannot open file: ",argv[1]);
-		exit (1);
-	}
+    if ((fi = fopen(argv[1],"r")) == NULL){
+        err_printf("%s%s%s%s",argv[0],": ", "Cannot open file: ",argv[1]);
+        exit (1);
+    }
 /* load source file into input buffer  */
      printf("Reading file %s ....Please wait\n",argv[1]);
      loadsize = b_load (fi,sc_buf);
      if(loadsize == RT_FAIL_1)
        err_printf("%s%s%s",argv[0],": ","Error in loading buffer.");
 
-/* close source file */	
- 	fclose(fi);
+/* close source file */    
+     fclose(fi);
 /*find the size of the file  */
     if (loadsize == LOAD_FAIL){
      printf("The input file %s %s\n", argv[1],"is not completely loaded.");
@@ -114,27 +114,27 @@ int main(int argc, char ** argv){
          display(sc_buf);
       }
 
-/* create string Literal Table */	
+/* create string Literal Table */    
   str_LTBL = b_allocate(INIT_CAPACITY,INC_FACTOR,'a');
-	if (str_LTBL == NULL){
-		err_printf("%s%s%s",argv[0],": ","Could not create string literal buffer");
-		exit(EXIT_FAILURE);
-	}
+    if (str_LTBL == NULL){
+        err_printf("%s%s%s",argv[0],": ","Could not create string literal buffer");
+        exit(EXIT_FAILURE);
+    }
 
-/*registrer exit function */	
+/*registrer exit function */    
  atexit(garbage_collect);
-	
+    
 /*Testbed for buffer, scanner,symbol table and parser*/
 
 /* Initialize scanner  */
-	scanner_init(sc_buf);
+    scanner_init(sc_buf);
 
 /* Start parsing */
-	printf("\nParsing the source file...\n\n");
-	
+    printf("\nParsing the source file...\n\n");
+    
         parser();
              
-	return (EXIT_SUCCESS); /* same effect as exit(0) */
+    return (EXIT_SUCCESS); /* same effect as exit(0) */
 }/*end of main */
 
 /* Error printing function with variable number of arguments
@@ -145,11 +145,11 @@ void err_printf( char *fmt, ... ){
   va_start(ap, fmt);
 
   (void)vfprintf(stderr, fmt, ap);
-	va_end(ap);
+    va_end(ap);
 
   /* Move to new line */
   if( strchr(fmt,'\n') == NULL )
-	  fprintf(stderr,"\n");
+      fprintf(stderr,"\n");
 }
 
 /* The function return the size of an open file 

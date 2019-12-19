@@ -71,7 +71,7 @@ typedef union TokenAttribute{
    Log_Op log_op;    /* logical operator attribute code */
    S_Eof seof;        /* source-end-of-file attribute code */
    int int_value;    /* integer literal attribute (value) */
-   int kwt_idx;      /* keyword index in the keyword table */	  
+   int kwt_idx;      /* keyword index in the keyword table */      
    short str_offset; /* sring literal offset from the beginning of the string literal buffer (str_LTBL->cb_head) */
    float flt_value;    /* floating-point literal attribute (value) */
    char vid_lex[VID_LEN+1]; /* variable identifier token attribute */
@@ -79,18 +79,18 @@ typedef union TokenAttribute{
 } TA;
 /* Should be used if no symbol table is implemented*/
 typedef struct AdditionalVidTokenAttibutes{
-	unsigned char flags;
-	union {
-		short int_value;
-		float flt_value;
-		void * str_locator;
-	} values;
+    unsigned char flags;
+    union {
+        short int_value;
+        float flt_value;
+        void * str_locator;
+    } values;
 }AVIDTA;
 /*Token declaration*/
 typedef struct Token {
-	int code;     /* token code */
-	TA attribute; /* token attribute */
-	AVIDTA avid_attribute; /* not used in this scanner implementation - for further use */
+    int code;     /* token code */
+    TA attribute; /* token attribute */
+    AVIDTA avid_attribute; /* not used in this scanner implementation - for further use */
 } Token;
 
 #endif
