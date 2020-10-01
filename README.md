@@ -5,7 +5,7 @@ Use with ./platyc <input_file> <output_file>
 
 Produces a valid C program
 
-####Example
+#### Example
 
 Platypus program:
 ```
